@@ -3,43 +3,47 @@
 /**
  * insertion_sort_list - Sorts a doubly linked list of integers
  * in ascending order using the Insertion sort algorithm
- * @list: The list to be sorted
+ * @list: The list to be printed
  */
+
 void insertion_sort_list(listint_t **list)
 {
-    listint_t *tmp, *prev, *next;
+	listint_t *tmp, *prev, *next;
 
-    if (!list || !*list || !(*list)->next)
-        return;
+	if (!list || *list == NULL || (*list)->next == NULL)
+		return;
 
-    tmp = (*list)->next;
+	tmp = (*list)->next;
 
-    while (tmp)
-    {
-        prev = tmp->prev;
-        next = tmp->next;
+	while (tmp)
+	{
+		while (tmp->prev && tmp->n < tmp->prev->n)
+		{
+			prev = tmp->prev;
+			next = tmp->next;
 
-        while (prev && tmp->n < prev->n)
-        {
-            if (prev->prev)
-                prev->prev->next = tmp;
-            else
-                *list = tmp;
+			if (prev)
+				prev->next = next;
 
-            tmp->prev = prev->prev;
-            prev->prev = tmp;
-            prev->next = next;
+			if (next)
+				next->prev = prev;
 
-            if (next)
-                next->prev = prev;
+			tmp->prev = prev->prev;
+			tmp->next = prev;
+			prev->prev = tmp;
 
-            tmp->next = prev;
-            prev = tmp->prev;
+			if (tmp->prev)
+				tmp->prev->next = tmp;
+			else
+				*list = tmp;
 
-            print_list((const listint_t *)*list);
-        }
+			if (next)
+				next->prev = prev;
 
-        tmp = tmp->next;
-    }
+			print_list((const listint_t *)*list);
+		}
+
+		tmp = tmp->next;
+	}
 }
 
